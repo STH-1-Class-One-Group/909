@@ -1,0 +1,3 @@
+### macOS 메타데이터 파일 제외 ###
+## .DS_Store -> Desktop Services Store의 약자로, macOS에서 폴더를 열 때마다 시스템이 자동으로 생성하는 숨김 파일 
+.DS_Store
