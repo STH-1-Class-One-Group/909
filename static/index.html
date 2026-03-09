@@ -7,5 +7,23 @@
 </head>
 <body>
     <h1>Hello world</h1>
+    <button>1</button>
+    <button>2</button>
+
+
+    <script>
+    /*go_get : 가라 get -> 서버(py)로 fetch 떠서 보내기 위한 함수*/
+    /*convert_response : html를 json으로 변경한걸 담는 변수*/
+    async function go_get()
+    {
+    try{  /*일단 해라*/
+        const response = await fetch("http://127.0.0.1:10000/get_choose")
+        const convert_response= response.json() /*json으로 바꾸는것임*/
+        }    
+    }
+    console.log(convert_response)
+    </script>
+
+
 </body>
 </html>
