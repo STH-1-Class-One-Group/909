@@ -8,12 +8,12 @@ app = Flask(__name__)
 def hello():
     return "Hello world"
 
-@-.route('/') #GET 요청용
+@get_choose.route('/') #GET 요청용
 def GET_choose():
     return "GET 받음!!"
 
 
-@-.route('/') #POST 요청용
+@post_choose.route('/') #POST 요청용
 def POST_choose():
     return "POST 받음!!"
 
