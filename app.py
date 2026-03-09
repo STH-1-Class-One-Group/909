@@ -1,14 +1,15 @@
-from flask import Flask
+from flask import Flask, jsonify
+from flask_cors import CORS
 import os
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/')
-def hello():
-    return "Hello world"
+def index(): #index.html을 잇는
+    return render_template('index.html')
 
-@get_choose.route('/') #GET 요청용
+@go_get.route('/go_get', method="GET") #GET 요청용
 def GET_choose():
     return "GET 받음!!"
 
@@ -16,7 +17,6 @@ def GET_choose():
 @post_choose.route('/') #POST 요청용
 def POST_choose():
     return "POST 받음!!"
-
 
 
 if __name__ == "__main__":
