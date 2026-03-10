@@ -16,8 +16,8 @@
     get_button.addEventListener("click", async() =>
     {
     console.log("get 클릭함")
-    const response = await fetch("http://127.0.0.1:10000/go_get") /*go_get 만든사람!*/
-    const convert_response= response.json() /*json으로 바꾸는것임*/
+    const response = await fetch("/go_get") /*go_get 만든사람!*/
+    const convert_response= await response.json() /*json으로 바꾸는것임*/
     console.log(convert_response)    
     })    
 
@@ -32,7 +32,7 @@
     post_button.addEventListener("click", async() =>
     {
     console.log("post 클릭함")
-    const response = await fetch("http://127.0.0.1:10000/post_get") /*post_get 만든사람!*/
+    const response = await fetch("/go_post", {"method" : "POST"}) /*post_get 만든사람!*/
     const convert_response= response.json() /*json으로 바꾸는것임*/
     console.log(convert_response)    
     })
