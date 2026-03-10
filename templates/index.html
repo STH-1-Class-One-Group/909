@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=`, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
@@ -10,33 +10,26 @@
     <button id="get_button">GET</button>
     <button id="post_button">POST</button>
 
-
     <script>
+    
     const get_button = document.getElementById("get_button") /*버튼 가져옴*/
     get_button.addEventListener("click", async() =>
     {
     console.log("get 클릭함")
     const response = await fetch("/go_get") /*go_get 만든사람!*/
-    const convert_response= await response.json() /*json으로 바꾸는것임*/
-    console.log(convert_response)    
-    })    
+    const convert_response_get= response.json() /*json으로 바꾸는것임*/
+    console.log(convert_response_get)
+    })       
 
-
-// async function(){
-// }
-
-// async () => {
-// }
 
     const post_button = document.getElementById("post_button") /*버튼 가져옴*/
     post_button.addEventListener("click", async() =>
     {
     console.log("post 클릭함")
-    const response = await fetch("/go_post", {"method" : "POST"}) /*post_get 만든사람!*/
-    const convert_response= response.json() /*json으로 바꾸는것임*/
-    console.log(convert_response)    
+    const response = await fetch("/go_post", {"method" : "POST"}) /*go_post 만든사람!*/
+    const convert_response_post= response.json() /*json으로 바꾸는것임*/
+    console.log(convert_response_post)
     })
-
     </script>
 
 
