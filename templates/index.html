@@ -20,7 +20,7 @@
 
     <div>
         <input class="content" placeholder="입력..."></input>
-        <button class="transport">post</button>
+        <button class="transport" onclick="sendData()">post</button>
     </div>
 
     <script>
@@ -32,10 +32,21 @@
                 document.querySelector('.team_jobs').innerText = data.team.join(', ');
             }) 
     }
-        function post(){
-            fetch("post_test")
+        function sendData(){
+            const content = document.querySelector(".content").value;
+            fetch("post_test", {
+                method:"post",
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body:JSON.stringify({
+                    "msg": content
+                })
+            })
             .then(response => response.json())
-            .then()
+            .then(data => {
+                document.querySelector(".team_jobs").innerText = data.message||"데이터 없음";
+            })
         }
     
     team();
