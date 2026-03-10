@@ -13,25 +13,29 @@
 
     <script>
     const get_button = document.getElementById("get_button") /*버튼 가져옴*/
-    get_button.addEventListener("click", async function fetch_get
+    get_button.addEventListener("click", async() =>
     {
-    fetch_get(){
+    console.log("get 클릭함")
     const response = await fetch("http://127.0.0.1:10000/go_get") /*go_get 만든사람!*/
     const convert_response= response.json() /*json으로 바꾸는것임*/
     console.log(convert_response)    
-    }
     })    
-    
+
+
+// async function(){
+// }
+
+// async () => {
+// }
 
     const post_button = document.getElementById("post_button") /*버튼 가져옴*/
-    post_button.addEventListener("click", async function fetch_get
+    post_button.addEventListener("click", async() =>
     {
-    fetch_get(){
-    const response = await fetch("http://127.0.0.1:10000/post_get") /*go_get 만든사람!*/
+    console.log("post 클릭함")
+    const response = await fetch("http://127.0.0.1:10000/post_get") /*post_get 만든사람!*/
     const convert_response= response.json() /*json으로 바꾸는것임*/
     console.log(convert_response)    
-    }
-    })    
+    })
 
     </script>
 
