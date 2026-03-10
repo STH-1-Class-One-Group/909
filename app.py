@@ -11,7 +11,7 @@ def index():
 
 @app.route('/go_get', methods=["GET"]) #GET 요청용 , /go_get 저요!!!
 def GET_choose():
-    return jsonify({"message" : "get 받음!!"})
+    return jsonify({"message":"get 받음!!"})
 
 
 @app.route('/go_post', methods=["POST"]) #POST 요청용

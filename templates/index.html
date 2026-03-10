@@ -17,8 +17,9 @@
     {
     console.log("get 클릭함")
     const response = await fetch("/go_get") /*go_get 만든사람!*/
-    const convert_response_get= response.json() /*json으로 바꾸는것임*/
-    console.log(convert_response_get)
+    const convert_response_get= await response.json() /*json으로 바꾸는것임*/
+    console.log(convert_response_get) /*key값 붙여야 포장지 벗겨서 나옴*/
+    console.log(convert_response_get.message) /*key값 붙여야 포장지 벗겨서 나옴*/
     })       
 
 
@@ -26,12 +27,11 @@
     post_button.addEventListener("click", async() =>
     {
     console.log("post 클릭함")
-    const response = await fetch("/go_post", {"method" : "POST"}) /*go_post 만든사람!*/
-    const convert_response_post= response.json() /*json으로 바꾸는것임*/
-    console.log(convert_response_post)
+    const response = await fetch("/go_post", { method : "POST"}) /*go_post 만든사람!*/
+    const convert_response_post= await response.json() /*json으로 바꾸는것임*/
+    console.log(convert_response_post.message)
     })
     </script>
-
 
 </body>
 </html>
