@@ -2,10 +2,25 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=`, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
     <h1>Hello world</h1>
+
+    <p>팀 이름: <span class="team_name"></span></p>
+    <p>팀원: <span class="team_jobs"></span></p>    
+
+    <script>
+        function team(){
+        fetch("/get_test")
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('.team_name').innerText = data.name;
+                document.querySelector('.team_jobs').innerText = data.team.join(', ');
+            }) 
+    }
+    team();
+    </script>
 </body>
 </html>
