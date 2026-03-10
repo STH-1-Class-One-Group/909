@@ -7,17 +7,24 @@
 </head>
 <body>
     <h1>GET/POST 연결 테스트</h1>
-    <button id="get_button">GET</button>
+    <button id="get_button">GET</button>  
     <button id="post_button">POST</button>
+
+<!--
+get_button : GET 버튼 ID
+post_button : POST 버튼 ID
+-->
+
 
     <script>
     
-    const get_button = document.getElementById("get_button") /*버튼 가져옴*/
-    get_button.addEventListener("click", async() =>
+    const get_button = document.getElementById("get_button") /*html에서 가져온 버튼 : get_button*/
+    get_button.addEventListener("click", async() => /*이벤트 리스너로 get_button 눌렀는지 확인*/
     {
-    console.log("get 클릭함")
-    const response = await fetch("/go_get") /*go_get 만든사람!*/
+    console.log("get 클릭함") /*클릭 확인*/
+    const response = await fetch("/go_get") /*go_get을 애타게 찾는것!!*/
     const convert_response_get= await response.json() /*json으로 바꾸는것임*/
+
     console.log(convert_response_get) /*key값 붙여야 포장지 벗겨서 나옴*/
     console.log(convert_response_get.message) /*key값 붙여야 포장지 벗겨서 나옴*/
     })       
