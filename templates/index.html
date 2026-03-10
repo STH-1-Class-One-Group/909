@@ -4,12 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <style>
+        .transport{
+            width:50px;
+            height:30px;
+        }
+    </style>
 </head>
 <body>
     <h1>Hello world</h1>
 
     <p>팀 이름: <span class="team_name"></span></p>
     <p>팀원: <span class="team_jobs"></span></p>    
+
+    <div>
+        <input class="content" placeholder="입력..."></input>
+        <button class="transport">post</button>
+    </div>
 
     <script>
         function team(){
@@ -20,6 +32,12 @@
                 document.querySelector('.team_jobs').innerText = data.team.join(', ');
             }) 
     }
+        function post(){
+            fetch("post_test")
+            .then(response => response.json())
+            .then()
+        }
+    
     team();
     </script>
 </body>
