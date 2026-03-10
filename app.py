@@ -9,12 +9,12 @@ CORS(app)
 def index(): 
     return render_template('index.html') #index.html을 잇는
 
-@app.route('/go_get', method="GET") #GET 요청용 , /go_get 저요!!!
+@app.route('/go_get', method=["GET"]) #GET 요청용 , /go_get 저요!!!
 def GET_choose():
     return jsonify({"get 받음!!"})
 
 
-@app.route('/go_post', method="POST") #POST 요청용
+@app.route('/go_post', method=["POST"]) #POST 요청용
 def POST_choose():
     return jsonify({"post 받음!!"})
 
