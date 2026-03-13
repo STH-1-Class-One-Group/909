@@ -24,7 +24,7 @@ def post_test():
     real_msg = request_data.get("msg")
 
     return jsonify({
-        "message": f"'{real_msg}"
+        "message": f"{real_msg}"
     })
     
 if __name__ == "__main__":
