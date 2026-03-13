@@ -1,11 +1,27 @@
 
-import os
+import sqlite3
 from flask import Flask, render_template, jsonify, request
-from flask_cors import CORS  
+from flask_cors import CORS 
+ 
 
 app = Flask(__name__)
+CORS(app)
 
 app.json.ensure_ascii = False
+
+conn = sqlite3.connect("practic.db")
+cur = conn.cursor()
+
+cur.execute("""
+            CREATE TABLE IF NOT EXISTS logs(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                content TEXT
+            )
+            """)
+
+conn.commit()
+
+conn.close()
 
 @app.route("/")
 def hello():

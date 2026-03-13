@@ -10,22 +10,31 @@
             width:50px;
             height:30px;
         }
+
+        .result{
+            width: 300px;
+            height: 300px;
+            border: 1px solid;
+        }
     </style>
 </head>
 <body>
     <h1>Hello world</h1>
-    {% comment %}GET을 실험하기 위해 만든 곳 {% endcomment %}
     <p>팀 이름: <span class="team_name"></span></p>
     <p>팀원: <span class="team_jobs"></span></p>    
 
     <div>
-        {% comment %} POST를 실험하기 위해 만든 곳 {% endcomment %}
+        
         <input class="content" placeholder="입력..."></input>
         <button class="transport" onclick="sendData()">post</button>
     </div>
 
+    <div class="result">
+
+    </div>
+
     <script>
-        {% comment %} GET을 받아오는 곳 {% endcomment %}
+
         function team(){
         fetch("/get_test")
             .then(response => response.json())
@@ -34,9 +43,14 @@
                 document.querySelector('.team_jobs').innerText = data.team.join(', ');
             }) 
     }
-    {% comment %} POST을 받아오는 곳 {% endcomment %}
         function sendData(){
             const content = document.querySelector(".content").value;
+            
+            if (content.trim() === "") {
+                alert("내용을 입력하세요.");
+                return; // 내용이 없으면 함수 종ㄹ료
+            }
+
             fetch("post_test", {
                 method:"post",
                 headers:{
@@ -48,9 +62,14 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.querySelector(".team_jobs").innerText = data.message||"데이터 없음";
+
+                const newLog = document.createElement("p"); 
+                newLog.innerText = data.message;
+
+                document.querySelector(".result").appendChild(newLog);
+                
+                document.querySelector(".content").value = "";
             })
-        }
     
     team();
     </script>
