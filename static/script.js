@@ -1,24 +1,24 @@
 //* html에서 불러옴
-const input_content = document.querySelector("#input-content")     // content 받는 input
+const user_text = document.querySelector("#user-text")     // content 받는 input
 const save_db_button = document.querySelector("#save-db-button")   // 저장 버튼
 const get_db_button = document.querySelector("#get-db-button")     // DB 내용 가져오는 버튼
 const DB_plus_div = document.querySelector(".DB-plus-div")         // 받은 DB 데이터를 출력하기 위한 영역(위치) 
 //// 불러오면서 .value 쓰면 새로고침 할 때 마다 들어온 값을 변수에 저장함
-
+const img_user_input = document.querySelector("#img-user-input")   // 저장 버튼
 
 
 //* 이벤트 리스너(save_db_button) - input 값 가져옴
 save_db_button.addEventListener("click", async(event) =>{
     event.preventDefault()
-    const live_input_content = input_content.value 
-    console.log("버튼 클릭", live_input_content)
-//// live_input_content : input_content의 값(버튼 클릭 시 입력된 값)을 저장
+    const live_user_text = user_text.value 
+    console.log("버튼 클릭", live_user_text)
+//// live_user_text : user_text의 값(버튼 클릭 시 입력된 값)을 저장
 
     //* fetch.  db_create를 연결점으로 정보를 주고(input 값) 받음(return 값)
     const response = await fetch("/db_create", {  // db_create 어딨니! 
         method : "POST",
         headers : { "Content-Type": "application/json" }, 
-        body: JSON.stringify({ "message": live_input_content }) //* 보낼거
+        body: JSON.stringify({ "message": live_user_text }) //* 보낼거
         })
 
     const json_response = await response.json() //* 받은거
@@ -82,3 +82,18 @@ async function getData(type) {
         console.error('상세 에러:', error);
     }
 }
+
+
+//* 이벤트 리스너(get_db_button) - 버튼 클릭 시 DB 내용 출력
+img_user_input.addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    if (file && file.type.startsWith('image/')) {
+        console.log("올바른 이미지 파일입니다. ✅");
+        // 여기에 미리보기 코드를 넣으면 됩니다.
+    } else {
+        alert("이미지 파일만 올려주세요! ❌");
+        fileInput.value = ""; // 잘못된 파일이면 선택 취소
+    }
+
+});
