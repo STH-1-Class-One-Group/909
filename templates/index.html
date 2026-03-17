@@ -5,13 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <h1>서버 통신 테스트</h1>
     <button onclick="getData('success')">성공 테스트</button>
     <button onclick="getData('fail')">실패 테스트</button>
 
     <div id="display" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"> 결과가 여기 표시됩니다. </div>
+
+    <h1>GET/POST 연결 테스트</h1>
+    <form action="">
+        <input id="input-content" type="text" name="content"> <!--이름을 지어야 알아먹음-->
+        <button id="save-db-button">저장</button>
+        <button id="get-db-button">DB 가져와</button>
+    </form>
+
+    <div class = "DB-plus-div">
+    </div>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-    
 </body>
 </html>
+
+
+<!--
+ID / input-content : content 받는 input
+ID / save-db-button : 저장 버튼
+ID / get-db-button : DB 내용 가져오는 버튼
+
+CLASS / DB-plus-div : 받은 DB 데이터를 출력하기 위한 영역(위치) 
+-->
