@@ -28,7 +28,9 @@ migrate = Migrate(app, db)
 #// 스키마 추가 시 migrate를 사용하여 변경 사항을 감지하고 업데이트(삭제/추가). 내 파이썬 코드와 DB의 최종 상태를 똑같이 동기화
 
 
-#* DB 스키마(설계도)
+
+#-------------------------------------------------------------------------------------------------------------
+#* 1. Human 스키마(설계도)
 class Human(db.Model):
     id = db.Column(db.Integer, primary_key=True)      
     content = db.Column(db.String(200), nullable=False)
@@ -36,6 +38,7 @@ class Human(db.Model):
 #// id(고유 번호) : 숫자를 자동으로 매겨서 고유번호 만들거임(자동 생성)
 #// content(내용) :  저장할 글자 받을거임. 200자 이내로 받을거고, 받은 답 없으면 에러낼거임!!
 #// age(나이) :  숫자 받을거고, 받은 답 없어도 괜찮음.
+
 
 #* 2. Profiles (사용자 프로필) - auth.users와 1:1 관계
 class Profile(db.Model):
@@ -50,7 +53,8 @@ class Profile(db.Model):
     profile_img_url = db.Column(db.Text) # 프로필 이미지 경로
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now()) # 생성일 (자동 입력)
 
-#* 3. Feeds (게시글 및 장소 데이터)
+
+#* 3. feed (게시글 및 장소 데이터)
 class Feed(db.Model):
     __tablename__ = 'feeds' # DB에 저장될 테이블 이름
     
@@ -84,13 +88,14 @@ class Like(db.Model):
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('profiles.id'), nullable=False)
     
     # 어떤 글에 좋아요를 눌렀는지 (Feed 테이블 참조)
-    feed_id = db.Column(db.BigInteger, db.ForeignKey('feeds.id'), nullable=False)
+    feed_id = db.Column(db.BigInteger, db.ForeignKey('feed.id'), nullable=False)
     
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now()) # 누른 시간
 
     # 중복 방지: 한 사람이(user_id) 같은 글(feed_id)에 좋아요를 두 번 누를 수 없게 설정합니다.
     __table_args__ = (db.UniqueConstraint('user_id', 'feed_id', name='unique_user_feed_like'),)
 
+#-------------------------------------------------------------------------------------------------------------
 #* DB 파일 생성 (처음 한 번만 실행됨)
 with app.app_context():
     db.create_all()
@@ -102,46 +107,38 @@ with app.app_context():
 @app.route('/')
 def index(): 
     return render_template('index.html') 
-
+#-------------------------------------------------------------------------------------------------------------
 
 #* 받은 데이터 DB에 저장
-@app.route('/db_create', methods=['POST'])  # db_create 저요!!!
-def db_create():
+@app.route('/feed_input_save', methods=['POST'])  # db_create 저요!!!
+def feed_input_save():
     data = request.get_json() #* fetch로 받아냄.
     input_content = data.get("message")
     
     # DB 장부에 추가
-    add_data = Human(content = input_content) 
+    add_data = Profile(content = input_content) 
     db.session.add(add_data)
     db.session.commit() 
     
-    return jsonify({"result": "success", "message": "DB에 잘 들어갔어요!"}) #* 받았으면 줘야함 
-#// db_create : 받은 데이터를 값만 뽑아 DB에 저장
-#// data : input값을 fetch로 받아(request) 가져와서 JSON으로 변환
-#// input_content : data에서 message라는 key로 값만 뽑아냄.
-#// add_data : Human class 안의 content 항목에 input_content를 넣음
-#// add(스테이징), commit(여기서는 최종 저장 역할도 함)
-#// json으로 변환 후 return 반환(js에 전송)
+    return jsonify({"result": "success", "message": "feed에 잘 들어갔어요!"}) 
+# 받은 데이터를 값만 뽑아내서 DB에 추가 후 js로 메시지 보냄
 
 
 #* DB에서 데이터 읽은 뒤 브라우저로 보냄.  (GET이니까 답 안 받음)
-@app.route('/db_read', methods=['GET'])  # db_read 어디있니!, 데이터를 일방적으로 보냄(GET) 
-def db_read():
-    db_all = Human.query.all()
+@app.route('/feed_input_go', methods=['GET'])  # db_read 어디있니!, 데이터를 일방적으로 보냄(GET) 
+def feed_input_go():
+    db_all = Profile.query.all()
     result = []
     for split_db in db_all : 
         result.append ({
             "id" : split_db.id,
-            "content" : split_db.content,
-            "age" : split_db.age
+            "nickname" : split_db.nickname,
+            "profile_img_url" : split_db.profile_img_url,
+            "created_at" : split_db.created_at
         })
     print(result)
     return jsonify(result) 
-#// db_read : DB 데이터 덩어리를 받아와서 쪼갠 뒤 항목별로 나눠 담아(id, content, age) json으로 변환 -> return
-#// db_all : db 안에 있는 모든 내용을 가져옴
-#// split_db : for 문을 통해 db_all에 있는 데이터를 하나씩 꺼내옴
-#// result : js로 보낼거(항목별로 데이터를 예쁘게 나눠담음)
-
+# 요청을 받으면 DB에서 데이터를 받아와서 하나씩 양식에 맞춰 가공 한 뒤 GET으로 보냄
 
 
 if __name__ == "__main__":
