@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <style>
+    #preview{
+    display:none
+    }
+    </style>
+
+
 </head>
 
 <body>
@@ -15,17 +23,24 @@
 
     <h1>GET/POST 연결 테스트</h1>
     <form action="">
-        <input id="input-content" type="text" name="content"> <!--이름을 지어야 알아먹음-->
+        <textarea name="usertext" id="user-text" placeholder="입력해주세요"></textarea>
         <button id="save-db-button">저장</button>
         <button id="get-db-button">DB 가져와</button>
+        <input type="file" id="img-user-input" accept="image/*">
     </form>
-
+    <div id = "div-img"></div>
+    <img id="preview" src="" style="display:none; max-width:300px;">
     <div class = "DB-plus-div">
     </div>
 
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
 </html>
+
+
+
 
 
 <!--
