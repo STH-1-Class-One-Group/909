@@ -1,10 +1,9 @@
 from flask import Flask, render_template, request, jsonify 
 from flask_cors import CORS
 import os
-from flask_sqlalchemy import SQLAlchemy  #app.py랑 SQLite 연결해줌(번역 해주는 애임)
-from flask_migrate import Migrate # 데이터 베이스 칸 추가할때 이거 없으면 삭제하고 다시 만들어서 데이터 새로 받아야함 
-from dotenv import load_dotenv  # .env 파일을 읽어주는 도구
-#flask_psycopg2는 import 안 해도 됨. 외부 서버와 내 파일을 연결해주는 역할(배달) 
+from flask_sqlalchemy import SQLAlchemy  
+from flask_migrate import Migrate 
+from dotenv import load_dotenv  
 
 
 app = Flask(__name__) #서버 객체
