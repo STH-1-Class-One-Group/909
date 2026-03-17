@@ -30,17 +30,29 @@ save_db_button.addEventListener("click", async(event) =>{
 
 
 
-//* 이벤트 리스너(get_db_button) - 버튼 클릭 시 DB html 생김
-get_db_button.addEventListener("click", async(event) =>{
-    event.preventDefault()
+//* 이벤트 리스너(get_db_button) - 버튼 클릭 시 DB 내용 출력
+get_db_button.addEventListener("click", async (event) => {
+    event.preventDefault();
 
-    //* fetch.  db_read를 연결점으로 정보를 받음(GET)
-    const receive = await fetch("/db_read") // db_read 저요!! //* 받은거
-    const json_receive = await receive.json() 
-    console.log("db 받음~", json_receive)
+    try {
+        const receive = await fetch("/db_read");
+        const json_receive = await receive.json(); // 서버에서 리스트 형태로 준다고 가정
+        console.log("DB 받음~", json_receive);
 
-    DB_plus_div.innerHTML = `<h1>${json_receive[1].content}</h1>`
-})
+        // 비워주고 새로 그리기
+        DB_plus_div.innerHTML = ""; 
+
+        // 데이터가 있다면 반복문으로 다 보여주기
+        json_receive.forEach(item => {
+            const h1 = document.createElement("h1");
+            h1.textContent = item.content; // 안전하게 textContent 사용
+            DB_plus_div.appendChild(h1);
+        });
+
+    } catch (error) {
+        console.error("데이터 가져오기 실패!", error);
+    }
+});
 //// receive : 받은 정보(DB)
 //// json_receive : receive를 json으로 바꿈(db 정보)
 
