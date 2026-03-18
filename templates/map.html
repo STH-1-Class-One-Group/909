@@ -35,6 +35,23 @@
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.3);
     }
+    .ice-bubble {
+        background: rgba(224, 244, 251, 0.7); /* Light icy blue */
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        text-shadow: 0 0 5px rgba(255,255,255,0.7);
+    }
+    .waddle-animation {
+        animation: waddle 0.5s ease-in-out;
+    }
+    @keyframes waddle {
+        0% { transform: rotate(0deg) scale(1); }
+        25% { transform: rotate(-8deg) scale(1.1); }
+        50% { transform: rotate(8deg) scale(1.1); }
+        75% { transform: rotate(-8deg) scale(1.1); }
+        100% { transform: rotate(0deg) scale(1); }
+    }
     .map-container {
       background: #f0f9ff;
       background-image: radial-gradient(#d1eef9 1.5px, transparent 1.5px);
@@ -125,23 +142,8 @@
 <div class="glass-panel p-4 rounded-custom shadow-lg flex items-center gap-3">
 <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white text-xl">❄️</div>
 <div>
-<h1 class="text-lg font-bold text-slate-800 leading-none">대전 고 (Daejeon Go)</h1>
-<p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">여행 가이드</p>
-</div>
-</div>
-<!-- Navigation Instruction Overlay (NEW) -->
-<div class="glass-panel p-4 rounded-custom shadow-xl border-l-4 border-primary animate-pulse" data-purpose="nav-instruction">
-<div class="flex items-start gap-3">
-<div class="bg-primary/20 p-2 rounded-lg">
-<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
-</svg>
-</div>
-<div>
-<p class="text-xs font-bold text-primary mb-0.5">다음 안내</p>
-<p class="text-base font-bold text-slate-800 leading-tight">300m 앞 우회전</p>
-<p class="text-[10px] text-slate-500 mt-1">엑스포로 방면</p>
-</div>
+<h1 class="text-lg font-bold text-slate-800 leading-none">Daejeon Arctic Project</h1>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">대전 가이드</p>
 </div>
 </div>
 <!-- Route Entry Card -->
@@ -152,14 +154,14 @@
 <label class="text-[10px] font-bold text-primary uppercase ml-1">출발지</label>
 <div class="flex items-center gap-2 bg-white/50 border border-slate-200 rounded-lg px-3 py-2 mt-1 focus-within:ring-2 focus-within:ring-primary/50">
 <span class="text-blue-400">●</span>
-<input class="bg-transparent border-none p-0 text-sm focus:ring-0 w-full placeholder-slate-400" placeholder="대전역" type="text" value="대전역"/>
+<input class="bg-transparent border-none p-0 text-sm focus:ring-0 w-full placeholder-slate-400" placeholder="출발" type="text" value=""/>
 </div>
 </div>
 <div class="relative">
 <label class="text-[10px] font-bold text-pink-400 uppercase ml-1">도착지</label>
 <div class="flex items-center gap-2 bg-white/50 border border-slate-200 rounded-lg px-3 py-2 mt-1 focus-within:ring-2 focus-within:ring-primary/50">
 <span class="text-pink-400">■</span>
-<input class="bg-transparent border-none p-0 text-sm focus:ring-0 w-full placeholder-slate-400" placeholder="오월드" type="text" value="오월드"/>
+<input class="bg-transparent border-none p-0 text-sm focus:ring-0 w-full placeholder-slate-400" placeholder="도착" type="text" value=""/>
 </div>
 </div>
 <button class="w-full bg-primary hover:bg-sky-400 text-white font-bold py-3 rounded-lg transition-all shadow-md mt-2 flex items-center justify-center gap-2">
@@ -173,7 +175,7 @@
 <!-- Category Filter Bar (Vertical in panel) -->
 <div class="glass-panel p-3 rounded-custom shadow-lg" data-purpose="category-filters">
 <div class="flex flex-col gap-2">
-<button class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary text-white text-sm font-medium transition-colors">
+<button class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 text-slate-600 text-sm font-medium transition-colors">
 <span class="text-lg">🗺️</span> 전체 장소
           </button>
 <button class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 text-slate-600 text-sm font-medium transition-colors">
@@ -196,32 +198,37 @@
 
 <!-- END: Top Filter Overlay -->
 <!-- BEGIN: Penguin Mascot Widget -->
-<div class="absolute bottom-8 right-8 z-20 flex flex-col items-end gap-3" data-purpose="mascot-widget">
-<!-- Speech Bubble -->
-<!-- Mascot Image -->
-<svg class="penguin-shadow transition-transform duration-500 group-hover:scale-105" height="280" viewbox="0 0 240 280" width="240" xmlns="http://www.w3.org/2000/svg">
-<!-- Body - Black Tuxedo Back -->
-<path d="M120 20C75 20 45 60 45 120C45 190 65 260 120 260C175 260 195 190 195 120C195 60 165 20 120 20Z" fill="#111D21"></path>
-<!-- White Belly Area -->
-<path d="M120 60C90 60 75 95 75 140C75 200 90 250 120 250C150 250 165 200 165 140C165 95 150 60 120 60Z" fill="white"></path>
-<!-- Flippers -->
-<path d="M45 130C25 140 15 170 20 190C25 210 50 170 60 150" fill="#111D21"></path>
-<path d="M195 130C215 140 225 170 220 190C215 210 190 170 180 150" fill="#111D21"></path>
-<!-- Head Details -->
-<!-- Characteristic White Eye Rings -->
-<circle cx="100" cy="85" fill="white" r="10"></circle> 
-<circle cx="140" cy="85" fill="white" r="10"></circle>
-<!-- Pupils -->
-<circle cx="102" cy="85" fill="#111D21" r="5"></circle>
-<circle cx="138" cy="85" fill="#111D21" r="5"></circle>
-<!-- Beak - Realistic short Adélie style -->
-<path d="M112 105L120 120L128 105C128 105 120 102 112 105Z" fill="#2C2C2C"></path>
-<path d="M115 108L120 115L125 108" fill="#FF8C42" opacity="0.8"></path>
-<!-- Feet -->
-<path d="M100 255C85 255 80 265 85 270L105 270L105 255Z" fill="#2C2C2C"></path>
-<path d="M140 255C155 255 160 265 155 270L135 270L135 255Z" fill="#2C2C2C"></path>
-</svg>
-</div>
+<div class="absolute bottom-8 right-8 z-20" data-purpose="mascot-widget">
+    <div class="relative"> <!-- New wrapper -->
+        <!-- Speech Bubble -->
+        <div id="penguin-speech-bubble" class="hidden absolute bottom-full mb-4 right-0 w-max max-w-xs ice-bubble p-3 rounded-lg shadow-lg text-sm text-slate-700">
+            <p id="penguin-message" class="font-semibold"></p>
+            <div class="absolute -bottom-2 right-4 w-4 h-4 ice-bubble rotate-45 border-t-0 border-l-0"></div>
+        </div>
+        <!-- Mascot Image -->
+        <svg id="penguin-mascot" class="penguin-shadow transition-transform duration-500 group-hover:scale-105 cursor-pointer" height="84" viewbox="0 0 240 280" width="72" xmlns="http://www.w3.org/2000/svg">
+            <!-- Body - Black Tuxedo Back -->
+            <path d="M120 20C75 20 45 60 45 120C45 190 65 260 120 260C175 260 195 190 195 120C195 60 165 20 120 20Z" fill="#111D21"></path>
+            <!-- White Belly Area -->
+            <path d="M120 60C90 60 75 95 75 140C75 200 90 250 120 250C150 250 165 200 165 140C165 95 150 60 120 60Z" fill="white"></path>
+            <!-- Flippers -->
+            <path d="M45 130C25 140 15 170 20 190C25 210 50 170 60 150" fill="#111D21"></path>
+            <path d="M195 130C215 140 225 170 220 190C215 210 190 170 180 150" fill="#111D21"></path>
+            <!-- Head Details -->
+            <!-- Characteristic White Eye Rings -->
+            <circle cx="100" cy="85" fill="white" r="10"></circle> 
+            <circle cx="140" cy="85" fill="white" r="10"></circle>
+            <!-- Pupils -->
+            <circle cx="102" cy="85" fill="#111D21" r="5"></circle>
+            <circle cx="138" cy="85" fill="#111D21" r="5"></circle>
+            <!-- Beak - Realistic short Adélie style -->
+            <path d="M112 105L120 120L128 105C128 105 120 102 112 105Z" fill="#2C2C2C"></path>
+            <path d="M115 108L120 115L125 108" fill="#FF8C42" opacity="0.8"></path>
+            <!-- Feet -->
+            <path d="M100 255C85 255 80 265 85 270L105 270L105 255Z" fill="#2C2C2C"></path>
+            <path d="M140 255C155 255 160 265 155 270L135 270L135 255Z" fill="#2C2C2C"></path>
+        </svg>
+    </div>
 </div>
 <!-- END: Penguin Mascot Widget -->
 </main>
@@ -232,6 +239,46 @@
       btn.addEventListener('click', () => {
         console.log('Action triggered: ' + btn.innerText);
       });
+    });
+
+    const penguinMascot = document.getElementById('penguin-mascot');
+    const speechBubble = document.getElementById('penguin-speech-bubble');
+    const messageElement = document.getElementById('penguin-message');
+
+    const messages = [
+        "나도 같이갈래🐧",
+        "펭귄들은 하루에 17~23km를 걸어서 이동해",
+        "황제펭귄은 한 번 잠수하면 수심 500m까지 내려가고 20분 넘게 버틸 수 있대",
+        "아델리펭귄은 마음에 드는 상대에게 프러포즈할 때 예쁜 조약돌을 선물한대",
+        "펭귄은 무릎이 없는 것처럼 보이지만 사실 털 속에 'ㄴ'자로 굽힌 무릎이 숨겨져 있어",
+        "펭귄은 가끔 빙하 위에서 똥을 너무 많이 싸서, 우주 인공위성에서도 그 흔적이 보일 정도래.",
+        "펭귄은 사실 무릎을 굽힌 채로 계속 투명 인간처럼 '기마 자세'를 유지하며 살고 있어. 엑스레이 찍으면 다 나와!",
+        "나도 여행을 좋아해 나도 같이가도 돼?"
+    ];
+
+    let bubbleTimeout;
+
+    penguinMascot.addEventListener('click', () => {
+        // Clear any existing timeout
+        if (bubbleTimeout) {
+            clearTimeout(bubbleTimeout);
+        }
+
+        const randomIndex = Math.floor(Math.random() * messages.length);
+        messageElement.textContent = messages[randomIndex];
+        speechBubble.classList.remove('hidden');
+
+        // Add waddle animation
+        penguinMascot.classList.add('waddle-animation');
+
+        bubbleTimeout = setTimeout(() => {
+            speechBubble.classList.add('hidden');
+        }, 10000);
+    });
+
+    // Remove animation class when it finishes
+    penguinMascot.addEventListener('animationend', () => {
+        penguinMascot.classList.remove('waddle-animation');
     });
   </script>
 </body></html>
