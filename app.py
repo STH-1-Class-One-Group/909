@@ -96,33 +96,33 @@ def home():
     return render_template('login.html') 
 
 
-#* 받은 데이터 DB에 저장
-@app.route('/db_create', methods=['POST'])  # db_create 저요!!!
-def db_create():
-    data = request.get_json() #* fetch로 받아냄.
-    input_content = data.get("message")
+# #* 받은 데이터 DB에 저장
+# @app.route('/db_create', methods=['POST'])  # db_create 저요!!!
+# def db_create():
+#     data = request.get_json() #* fetch로 받아냄.
+#     input_content = data.get("message")
     
-    # DB 장부에 추가
-    add_data = Human(content = input_content) 
-    db.session.add(add_data)
-    db.session.commit() 
+#     # DB 장부에 추가
+#     add_data = Human(content = input_content) 
+#     db.session.add(add_data)
+#     db.session.commit() 
     
-    return jsonify({"result": "success", "message": "DB에 잘 들어갔어요!"}) #* 받았으면 줘야함 
+#     return jsonify({"result": "success", "message": "DB에 잘 들어갔어요!"}) #* 받았으면 줘야함 
 
 
-#* DB에서 데이터 읽은 뒤 브라우저로 보냄.  (GET이니까 답 안 받음)
-@app.route('/db_read', methods=['GET'])  # db_read 어디있니!, 데이터를 일방적으로 보냄(GET) 
-def db_read():
-    db_all = Human.query.all()
-    result = []
-    for split_db in db_all : 
-        result.append ({
-            "id" : split_db.id,
-            "content" : split_db.content,
-            "age" : split_db.age
-        })
-    print(result)
-    return jsonify(result) 
+# #* DB에서 데이터 읽은 뒤 브라우저로 보냄.  (GET이니까 답 안 받음)
+# @app.route('/db_read', methods=['GET'])  # db_read 어디있니!, 데이터를 일방적으로 보냄(GET) 
+# def db_read():
+#     db_all = Human.query.all()
+#     result = []
+#     for split_db in db_all : 
+#         result.append ({
+#             "id" : split_db.id,
+#             "content" : split_db.content,
+#             "age" : split_db.age
+#         })
+#     print(result)
+#     return jsonify(result) 
 
 
 
