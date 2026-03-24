@@ -183,9 +183,6 @@ async function runNavigation() {
         // 👉 실서비스는 백엔드로 옮겨라
         // ==============================
 
-        //TODO api 키 가릴것.
-        // const KAKAO_REST_API = "9d24a7ce098f8471df6a3f1802dde837"; 
-
         // ==============================
         // 🔥 Kakao Mobility API 호출
         // ==============================
