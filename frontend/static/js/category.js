@@ -374,14 +374,16 @@ function showPoiOverlay(poi) {
     kakaoBtn.textContent = '카카오맵';
 
     // 커뮤니티 버튼
-    var communityBtn = document.createElement('button');
+    var communityBtn = document.createElement('a');
+    communityBtn.href = 'community.html';   //파일을 직접 찾아가는 것(페이지 전체 새로고침)
     communityBtn.style.cssText = [
         'flex:1',
         'padding:10px',
         'background:#ff6b35',
         'color:#fff',
-        'border:none',
         'border-radius:8px',
+        'text-align:center',
+        'text-decoration:none',
         'font-size:13px',
         'font-weight:600',
         'cursor:pointer'
