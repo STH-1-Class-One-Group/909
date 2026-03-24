@@ -375,7 +375,7 @@ function showPoiOverlay(poi) {
 
     // 커뮤니티 버튼
     var communityBtn = document.createElement('a');
-    communityBtn.href = 'community.html';   //파일을 직접 찾아가는 것(페이지 전체 새로고침)
+    communityBtn.href = '/community';   //라우터로 요청을 보냄. (페이지 전체 새로고침)
     communityBtn.style.cssText = [
         'flex:1',
         'padding:10px',
