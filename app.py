@@ -17,6 +17,7 @@ from fastapi import FastAPI, Depends, HTTPException, Request, status  # ← stat
 from fastapi.responses import JSONResponse, HTMLResponse, RedirectResponse  # ← RedirectResponse 추가!
 from fastapi.templating import Jinja2Templates
 from typing import Optional 
+
 # -----------------------------------------------------------------------------------
 
 # .env 로드 및 설정
@@ -368,6 +369,16 @@ async def index_page(request: Request):
         "request": request,
         "kakao_key": os.getenv("KAKAO_RESTAPI")
     })
+
+
+templates = Jinja2Templates(directory="frontend/templates")
+
+
+# 카테고리 js에서 보낸 요청 받기(라우터) 
+# html을 랜더링하여 응답
+@app.get("/community")
+async def community(request: Request):
+    return templates.TemplateResponse("community.html", {"request": request})
 #!--------------------------------------------------------------------------------------------------sb
 
 
