@@ -73,7 +73,7 @@ window.loginWithKakao = async function() {
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: 'kakao',
             options: {
-                redirectTo: window.location.origin + '/map' // 올바른 앱 경로로 리다이렉트
+                redirectTo: window.location.origin + 'https://eizpocttesnvmvqyiwhv.supabase.co/auth/v1/callback' // 올바른 앱 경로로 리다이렉트
             }
         });
         if (error) throw error;
