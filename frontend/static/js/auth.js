@@ -49,19 +49,20 @@ async function getCurrentUser() {
 }
 
 // 구글 로그인
-window.loginWithKakao = async function() {
-    console.log("🔗 카카오 로그인 버튼 클릭됨!");
+window.loginWithGoogle = async function() {
     try {
-        const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: 'kakao',
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
             options: {
-                redirectTo: window.location.origin + '/map' // 올바른 앱 경로로 리다이렉트
+                redirectTo: window.location.origin + '/map'
             }
         });
+
         if (error) throw error;
+
     } catch (error) {
-        console.error('카카오 로그인 에러:', error.message);
-        alert('카카오 로그인 실패: ' + error.message);
+        console.error('구글 로그인 에러:', error);
+        alert('구글 로그인 실패: ' + error.message);
     }
 }
 
