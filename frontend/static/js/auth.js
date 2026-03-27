@@ -49,12 +49,12 @@ async function getCurrentUser() {
 }
 
 // 구글 로그인
-window.loginWithGoogle = async function() {
+async function loginWithGoogle() {
     try {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: window.location.origin + 'https://eizpocttesnvmvqyiwhv.supabase.co/auth/v1/callback'
+                redirectTo: window.location.origin + '/map'
             }
         });
 
@@ -67,13 +67,13 @@ window.loginWithGoogle = async function() {
 }
 
 // 카카오 로그인
-window.loginWithKakao = async function() {
+async function loginWithKakao() {
     console.log("🔗 카카오 로그인 버튼 클릭됨!");
     try {
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: 'kakao',
             options: {
-                redirectTo: window.location.origin + 'https://eizpocttesnvmvqyiwhv.supabase.co/auth/v1/callback' // 올바른 앱 경로로 리다이렉트
+                redirectTo: window.location.origin + '/map' // 올바른 앱 경로로 리다이렉트
             }
         });
         if (error) throw error;
@@ -111,6 +111,10 @@ window.addEventListener('DOMContentLoaded', async () => {
     // 초기 로드 시 세션이 있는지 확인 (onAuthStateChange가 비동기적으로 실행되기 전)
     const { data: { session } } = await supabase.auth.getSession();
     console.log('🔍 Initial DOMContentLoaded session check:', session);
+
+    // 버튼에 이벤트 리스너 연결 (type="module" 스코프 문제 해결)
+    document.getElementById('google-btn')?.addEventListener('click', loginWithGoogle);
+    document.getElementById('kakao-btn')?.addEventListener('click', loginWithKakao);
     
     const path = window.location.pathname;
     const isPublicPath = path === '/' || path === '/signup';
