@@ -101,29 +101,37 @@ window.addEventListener('DOMContentLoaded', async () => {
     const path = window.location.pathname;
     const isPublicPath = path === '/' || path === '/signup' || path === '/login.html'; // login.html 추가 (필요시)
     
-    if (session) {
-        console.log('✅ 로그인되어 있음!');
-        
-        // 쿠키에 토큰 저장
-        document.cookie = 'sb-access-token=' + session.access_token + 
-                        '; path=/; max-age=3600; SameSite=Lax';
-        
-        console.log('✅ 쿠키 저장 완료');
-        
-        // 현재 페이지가 로그인 페이지거나 가입 페이지면 /map으로 이동
-        if (isPublicPath) {
-            console.log('🚀 /map으로 리다이렉트');
-            window.location.href = '/map';
-        }
-    } else {
-        console.log('❌ 세션 없음 - 로그인 필요');
-        // 세션이 없는데 보호된 페이지(/map, /community 등)에 있으면 로그인 페이지(/)로 이동
-        if (!isPublicPath) {
-            console.log('🚀 로그인 페이지로 리다이렉트');
-            window.location.href = '/';
-        }
+if (session) {
+    console.log('✅ 로그인되어 있음!');
+
+    // profiles에 없으면 생성 (OAuth 유저 대비)
+    const { data: profile } = await supabaseClient
+        .from('profiles')
+        .select('id')
+        .eq('id', session.user.id)
+        .single();
+
+    if (!profile) {
+        await supabaseClient.from('profiles').insert({
+            id: session.user.id,
+            email: session.user.email,
+            nickname: session.user.user_metadata?.name || session.user.email.split('@')[0],
+            profile_img_url: session.user.user_metadata?.avatar_url || null
+        });
     }
-});
+
+    // 쿠키에 토큰 저장
+    document.cookie = 'sb-access-token=' + session.access_token + 
+                    '; path=/; max-age=3600; SameSite=Lax';
+
+    console.log('✅ 쿠키 저장 완료');
+
+    if (isPublicPath) {
+        console.log('🚀 /map으로 리다이렉트');
+        window.location.href = '/map';
+    }
+}
+})
 
 // 이렇게 변경하면 HTML 어디서든 확실하게 인식합니다.
 window.loginWithKakao = async function() {
