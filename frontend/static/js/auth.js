@@ -49,22 +49,20 @@ async function getCurrentUser() {
 }
 
 // 구글 로그인
-async function loginWithGoogle() {
+window.loginWithGoogle = async function() {
     try {
-        const { data, error } = await supabase.auth.signInWithOAuth({
+        const { error } = await supabaseClient.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: window.location.origin + '/map' // 올바른 앱 경로로 리다이렉트
+                redirectTo: window.location.origin + '/map'
             }
         });
-        if (error) {
-            console.error('구글 로그인 에러:', error);
-            alert('구글 로그인 실패: ' + error.message);
-        }
-        // OAuth는 자동으로 리다이렉트되므로 여기서 추가 처리 불필요
+
+        if (error) throw error;
+
     } catch (error) {
         console.error('구글 로그인 에러:', error);
-        alert('구글 로그인 중 오류 발생');
+        alert('구글 로그인 실패: ' + error.message);
     }
 }
 
