@@ -91,49 +91,52 @@ async function loginWithGoogle() {
 // OAuth 콜백 후 세션 확인 및 리다이렉트
 window.addEventListener('DOMContentLoaded', async () => {
     console.log('🔍 페이지 로드 - 세션 확인 시작');
-    
-    // 현재 세션 확인
-    const { data: { session }, error } = await supabaseClient.auth.getSession();
-    
-    console.log('🔍 세션 확인 결과:', session);
-    if (error) console.log('🔍 에러:', error);
-    
+
     const path = window.location.pathname;
-    const isPublicPath = path === '/' || path === '/signup' || path === '/login.html'; // login.html 추가 (필요시)
-    
-if (session) {
-    console.log('✅ 로그인되어 있음!');
+    const isPublicPath = path === '/' || path === '/signup' || path === '/login.html';
 
-    // profiles에 없으면 생성 (OAuth 유저 대비)
-    const { data: profile } = await supabaseClient
-        .from('profiles')
-        .select('id')
-        .eq('id', session.user.id)
-        .single();
+    supabaseClient.auth.onAuthStateChange(async (event, session) => {
+        console.log('🔍 Auth 이벤트:', event, session);
 
-    if (!profile) {
-        await supabaseClient.from('profiles').insert({
-            id: session.user.id,
-            email: session.user.email,
-            nickname: session.user.user_metadata?.name || session.user.email.split('@')[0],
-            profile_img_url: session.user.user_metadata?.avatar_url || null
-        });
-    }
+        if (session) {
+            console.log('✅ 로그인되어 있음!');
 
-    // 쿠키에 토큰 저장
-    document.cookie = 'sb-access-token=' + session.access_token + 
-                    '; path=/; max-age=3600; SameSite=Lax';
+            const { data: profile } = await supabaseClient
+                .from('profiles')
+                .select('id')
+                .eq('id', session.user.id)
+                .single();
 
-    console.log('✅ 쿠키 저장 완료');
+            if (!profile) {
+                await supabaseClient.from('profiles').insert({
+                    id: session.user.id,
+                    email: session.user.email,
+                    nickname: session.user.user_metadata?.name || session.user.email.split('@')[0],
+                    profile_img_url: session.user.user_metadata?.avatar_url || null
+                });
+            }
 
-    if (isPublicPath) {
-        console.log('🚀 /map으로 리다이렉트');
-        window.location.href = '/map';
-    }
-}
-})
+            document.cookie = 'sb-access-token=' + session.access_token +
+                '; path=/; max-age=3600; SameSite=Lax';
 
-// 이렇게 변경하면 HTML 어디서든 확실하게 인식합니다.
+            console.log('✅ 쿠키 저장 완료');
+
+            if (isPublicPath) {
+                console.log('🚀 /map으로 리다이렉트');
+                window.location.href = '/map';
+            }
+
+        } else {
+            console.log('❌ 세션 없음 - 로그인 필요');
+            if (!isPublicPath) {
+                console.log('🚀 로그인 페이지로 리다이렉트');
+                window.location.href = '/';
+            }
+        }
+    });
+});
+
+// loginWithKakao는 그대로 유지
 window.loginWithKakao = async function() {
     console.log("🔗 카카오 로그인 버튼 클릭됨!");
     try {
