@@ -1,138 +1,81 @@
 // Supabase 클라이언트 초기화
-
-const supabaseClient = window.supabase.createClient(
-    window.SUPABASE_URL,
-    window.SUPABASE_KEY
-);
+import { supabase } from './supabase.js';
 
 // 이메일 로그인 함수
 async function login(email, password) {
-const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email: email,
-    password: password
-});
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
 
-if (error) {
-    throw error;
-}
-
-if (data.session) {
-    document.cookie = 'sb-access-token=' + data.session.access_token + '; path=/; max-age=3600; SameSite=Lax';
-}
-
-// 성공 시 지도로 이동
-window.location.href = '/map';
-return data;
-}
-
-
-// 회원가입 함수  (플랫폼으로 로그인된 내역을 가져다가 DB-profiles에 넣음)
-async function signup(email, password, nickname) {
-// 1단계: supabaseClient Auth 회원가입
-const { data: authData, error: authError } = await supabaseClient.auth.signUp({
-    email: email,
-    password: password,
-    options: {
-        data: { nickname: nickname } // 트리거가 사용할 닉네임 데이터 전달  (SQL Editor에 트리거 추가)
+    if (error) {
+        throw error;
     }
-});
-
-if (authError) {
-    throw authError;
+    // Supabase 클라이언트가 세션을 자동으로 관리하므로 수동 쿠키 설정 제거
+    // 성공 시 지도로 이동
+    window.location.href = '/map';
+    return data;
 }
 
+// 회원가입 함수 (플랫폼으로 로그인된 내역을 가져다가 DB-profiles에 넣음)
+async function signup(email, password, nickname) {
+    // 1단계: supabase Auth 회원가입
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+            data: { nickname: nickname } // 트리거가 사용할 닉네임 데이터 전달 (SQL Editor에 트리거 추가)
+        }
+    });
 
-if (authData.session) {
-    document.cookie = 'sb-access-token=' + authData.session.access_token + '; path=/; max-age=3600; SameSite=Lax';
+    if (authError) {
+        throw authError;
+    }
+    // Supabase 클라이언트가 세션을 자동으로 관리하므로 수동 쿠키 설정 제거
+    return authData;
 }
-
-return authData;
-}
-
 
 // 로그아웃 함수
 async function logout() {
-    await supabaseClient.auth.signOut();
-    // 쿠키 삭제
-    document.cookie = 'sb-access-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax';
+    await supabase.auth.signOut();
+    // Supabase 클라이언트가 세션을 자동으로 관리하므로 수동 쿠키 삭제 제거
     window.location.href = '/';
 }
 
 // 현재 사용자 가져오기
 async function getCurrentUser() {
-const { data: { user } } = await supabaseClient.auth.getUser();
-return user;
+    const { data: { user } } = await supabase.auth.getUser();
+    return user;
 }
-
 
 // 구글 로그인
 async function loginWithGoogle() {
     try {
-        const { data, error } = await supabaseClient.auth.signInWithOAuth({
+        const { data, error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: 'https://eizpocttesnvmvqyiwhv.supabase.co/auth/v1/callback'
+                redirectTo: window.location.origin + '/map' // 올바른 앱 경로로 리다이렉트
             }
         });
-        
         if (error) {
             console.error('구글 로그인 에러:', error);
             alert('구글 로그인 실패: ' + error.message);
         }
-        
         // OAuth는 자동으로 리다이렉트되므로 여기서 추가 처리 불필요
-        
     } catch (error) {
         console.error('구글 로그인 에러:', error);
         alert('구글 로그인 중 오류 발생');
     }
 }
 
-// OAuth 콜백 후 세션 확인 및 리다이렉트
-window.addEventListener('DOMContentLoaded', async () => {
-    console.log('🔍 페이지 로드 - 세션 확인 시작');
-    
-    // 현재 세션 확인
-    const { data: { session }, error } = await supabaseClient.auth.getSession();
-    
-    console.log('🔍 세션 확인 결과:', session);
-    if (error) console.log('🔍 에러:', error);
-    
-    const path = window.location.pathname;
-    const isPublicPath = path === '/' || path === '/signup' || path === '/login.html'; // login.html 추가 (필요시)
-    
-    if (session) {
-        console.log('✅ 로그인되어 있음!');
-        
-        // 쿠키에 토큰 저장
-        document.cookie = 'sb-access-token=' + session.access_token + 
-                        '; path=/; max-age=3600; SameSite=Lax';
-        
-        console.log('✅ 쿠키 저장 완료');
-        
-        // 현재 페이지가 로그인 페이지거나 가입 페이지면 /map으로 이동
-        if (isPublicPath) {
-            console.log('🚀 /map으로 리다이렉트');
-            window.location.href = '/map';
-        }
-    } else {
-        console.log('❌ 세션 없음 - 로그인 필요');
-        // 세션이 없는데 보호된 페이지(/map, /community 등)에 있으면 로그인 페이지(/)로 이동
-        if (!isPublicPath) {
-            console.log('🚀 로그인 페이지로 리다이렉트');
-            window.location.href = '/';
-        }
-    }
-});
-
-// 이렇게 변경하면 HTML 어디서든 확실하게 인식합니다.
+// 카카오 로그인
 window.loginWithKakao = async function() {
     console.log("🔗 카카오 로그인 버튼 클릭됨!");
     try {
-        const { data, error } = await supabaseClient.auth.signInWithOAuth({
+        const { data, error } = await supabase.auth.signInWithOAuth({
             provider: 'kakao',
             options: {
-                redirectTo: '/map'
+                redirectTo: window.location.origin + '/map' // 올바른 앱 경로로 리다이렉트
             }
         });
         if (error) throw error;
@@ -141,3 +84,47 @@ window.loginWithKakao = async function() {
         alert('카카오 로그인 실패: ' + error.message);
     }
 }
+
+// Supabase 인증 상태 변경 리스너
+supabase.auth.onAuthStateChange((event, session) => {
+    console.log('🔗 Auth State Change Event:', event, 'Session:', session);
+    const path = window.location.pathname;
+    const isPublicPath = path === '/' || path === '/signup'; // 로그인, 회원가입 페이지
+
+    if (session) {
+        console.log('✅ 로그인됨 / 세션 유지됨');
+        if (isPublicPath) {
+            console.log('🚀 로그인 페이지에서 /map으로 리다이렉트');
+            window.location.href = '/map';
+        }
+    } else {
+        console.log('❌ 로그아웃됨 / 세션 없음');
+        // 세션이 없는데 보호된 페이지에 있으면 로그인 페이지로 이동
+        if (!isPublicPath) {
+            console.log('🚀 보호된 페이지에서 /로 리다이렉트');
+            window.location.href = '/';
+        }
+    }
+});
+
+// DOMContentLoaded 이벤트 리스너는 onAuthStateChange 리스너로 대체되거나 보완될 수 있음
+// 여기서는 초기 로드 시 세션 확인만 남기고, 상태 변경은 onAuthStateChange가 담당
+window.addEventListener('DOMContentLoaded', async () => {
+    // 초기 로드 시 세션이 있는지 확인 (onAuthStateChange가 비동기적으로 실행되기 전)
+    const { data: { session } } = await supabase.auth.getSession();
+    console.log('🔍 Initial DOMContentLoaded session check:', session);
+    
+    const path = window.location.pathname;
+    const isPublicPath = path === '/' || path === '/signup';
+
+    if (session && isPublicPath) {
+        // 이미 로그인되어 있고 로그인/회원가입 페이지라면 /map으로 리다이렉트
+        console.log('🚀 Initial load: Logged in on public path, redirecting to /map');
+        window.location.href = '/map';
+    } else if (!session && !isPublicPath && path !== '/map' && !path.startsWith('/community')) {
+        // 로그인되어 있지 않고, 보호된 페이지(map, community 외)라면 로그인 페이지로 리다이렉트
+        // map, community는 require_login 미들웨어에서 처리
+        console.log('🚀 Initial load: Not logged in on protected path, redirecting to /');
+        window.location.href = '/';
+    }
+});
